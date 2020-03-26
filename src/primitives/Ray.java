@@ -1,23 +1,28 @@
-/**
- * 
- */
 package primitives;
 
 /**
- * @author User
- *
+ * class Ray represents a Ray by a source point and the direction of the ray in cartesian system 
+ * 
+ * @author Yochi Shtrauber & Rachel Stone
  */
 public class Ray {
 
 	/**
-	 * 
+	 * the source point of the ray
 	 */
 	Point3D _p0;
+	
+	/**
+	 * the direction vector of the ray
+	 */
 	Vector _dir;
 	
 	/**
-	 * 
-	 */
+     * Ray constructor receiving values of the source point and directional vector 
+     * 
+     * @param p0 the source point
+     * @param dir the value of the directional vector
+     */
 	public Ray(Point3D p0, Vector dir) {
 		if(dir.length() != 1) {
 			_dir = dir.normalized();
@@ -28,7 +33,9 @@ public class Ray {
 	}
 	
 	/**
+	 *  copy constructor for a ray
 	 *  
+	 *  @param other ray
 	 */
 	public Ray(Ray other) {
 		_p0 = new Point3D(other._p0);
@@ -36,10 +43,21 @@ public class Ray {
 	}
 
 	/**
-	 * @return the _p0
+	 * source point getter
+	 * 
+	 * @return the source point _p0
 	 */
 	public Point3D get_p0() {
 		return _p0;
+	}
+	
+	/**
+	 * directed vector getter
+	 * 
+	 * @return the vector _dir
+	 */
+	public Vector get_dir() {
+		return _dir;
 	}
 
 	@Override
@@ -56,12 +74,7 @@ public class Ray {
         return "" + _p0.toString() + " " + _dir.toString();
     }
 	
-	/**
-	 * @return the _dir
-	 */
-	public Vector get_dir() {
-		return _dir;
-	}
+
 	
 
 }
