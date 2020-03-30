@@ -146,7 +146,7 @@ public final class Vector {
 	}
 	
 	/**
-	 * computes the length of the vector
+	 * computes the length of the vector by finding the distance of the vector from the point (0, 0, 0)
 	 * 
 	 * @return the length of the vector
 	 */
@@ -160,9 +160,10 @@ public final class Vector {
 	 * @return normalized vector 
 	 */
 	public Vector normalize() {
-		_head._x = new Coordinate(_head._x._coord/length());
-		_head._y = new Coordinate(_head._y._coord/length());
-		_head._z = new Coordinate(_head._z._coord/length());
+		double length = length();
+		_head._x = new Coordinate(_head._x._coord/length);
+		_head._y = new Coordinate(_head._y._coord/length);
+		_head._z = new Coordinate(_head._z._coord/length);
 		return this;
 	}
 	

@@ -10,7 +10,7 @@ public final class Point3D {
 	/**
 	 * a static point that has the value zero 
 	 */
-    final static Point3D ZERO = new Point3D(0, 0, 0);
+    public final static Point3D ZERO = new Point3D(0, 0, 0);
     
     /**
 	 *  the coordinates of the point 
@@ -118,7 +118,7 @@ public final class Point3D {
 	}
 
 	/**
-	 * the square of the distance between two points
+	 * the square of the distance between two points p1^2+p2^2+p3^2
 	 * 
 	 * @param other the point to find the squared distance from
 	 * @return the square of the distance
@@ -130,7 +130,7 @@ public final class Point3D {
 	}
 
 	/**
-	 * the distance between two points
+	 * the distance between two points: computes the root of p1^2+p2^2+p3^2
 	 * 
 	 * @param other the point to find the distance from
 	 * @return the distance
