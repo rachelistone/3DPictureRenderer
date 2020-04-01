@@ -1,3 +1,6 @@
+/** @author Yochi Shtrauber 204023055 & Rachel Stone 315353938
+email: yochishtrauber@gmail.com rachelstone1996@gmail.com
+*/
 package run;
 import primitives.*;
 import static java.lang.System.out;
