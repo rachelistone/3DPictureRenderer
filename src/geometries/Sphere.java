@@ -39,7 +39,10 @@ public class Sphere extends RadialGeometry {
 	@Override
 	public Vector getNormal(Point3D point) {
 		// TODO Auto-generated method stub
-		return null;
+		Vector v = point.subtract(_center);
+		if (v.length() != _radius)
+			throw new IllegalArgumentException("the point is not on the sphere");
+		return v.normalize();
 	}
 
 

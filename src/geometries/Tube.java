@@ -20,7 +20,7 @@ public class Tube extends RadialGeometry {
 	 * constructor receiving radius and axis ray of the tube center
 	 * 
 	 * @param radius
-	 * @param axisRay the axiix ray of the tube center
+	 * @param axisRay the axis ray of the tube center
 	 */
 	public Tube(double radius, Ray axisRay) {
 		super(radius);
@@ -39,7 +39,16 @@ public class Tube extends RadialGeometry {
 	@Override
 	public Vector getNormal(Point3D point) {
 		// TODO Auto-generated method stub
-		return null;
+		// the vector between the given point to the source of the ray
+		Vector v = point.subtract(_axisRay.get_p0());
+		//the projection of the vector between the given point to the source of the ray, on the axis of the tube
+		double height = v.dotProduct(_axisRay.get_dir().normalize());
+		//vector with the axis direction and the projection's length:
+		Vector axisHeight = _axisRay.get_dir().scale(height);
+		//if the distance between the given point to the head of the vector which in the given point's height is the radius, it is on the tube
+		if (point.distance(axisHeight.get_head()) != _radius)
+			throw new IllegalArgumentException("the point is not on the tube");
+		return point.subtract(axisHeight.get_head()).normalize();
 	}
 	
 	@Override

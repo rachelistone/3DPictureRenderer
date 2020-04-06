@@ -22,6 +22,7 @@ public class Plane implements Geometry {
 
 	/**
 	 * constructor receiving three 3D points dissenters the plane
+	 * it takes 2 vectors from the vertices and calculates their normal to the plane
 	 * 
 	 * @param p0 the first point 
 	 * @param p1 the second point 
@@ -29,7 +30,11 @@ public class Plane implements Geometry {
 	 */
 	public Plane(Point3D p0, Point3D p1, Point3D p2) {
 		_p = new Point3D(p0);
-		_normal = null;
+		Vector v1 = p1.subtract(p0);
+		Vector v2 = p2.subtract(p0);
+		if (v1.normalize() == v2.normalize())
+			throw new IllegalArgumentException("there are two vertices on the same line");
+		_normal = v1.crossProduct(v2).normalize();
 	}
 
 	/**
@@ -61,7 +66,10 @@ public class Plane implements Geometry {
 	@Override
 	public Vector getNormal(Point3D point) {
 		// TODO Auto-generated method stub
-		return null;
+		Vector v = point.subtract(_p);
+		if (v.dotProduct(_normal) != 0)
+			throw new IllegalArgumentException("the point is not on the plane");
+		return _normal;
 	}
 
 }
