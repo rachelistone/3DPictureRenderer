@@ -43,11 +43,14 @@ public class Tube extends RadialGeometry {
 		Vector v = point.subtract(_axisRay.get_p0());
 		//the projection of the vector between the given point to the source of the ray, on the axis of the tube
 		double height = v.dotProduct(_axisRay.get_dir().normalize());
+		//if v is already rectangle to the tube axis 
+		if (height == 0)
+			return v.normalize();
 		//vector with the axis direction and the projection's length:
 		Vector axisHeight = _axisRay.get_dir().scale(height);
 		//if the distance between the given point to the head of the vector which in the given point's height is the radius, it is on the tube
 		if (point.distance(axisHeight.get_head()) != _radius)
-			throw new IllegalArgumentException("the point is not on the tube");
+			return null;
 		return point.subtract(axisHeight.get_head()).normalize();
 	}
 	
