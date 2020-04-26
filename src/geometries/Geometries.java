@@ -3,6 +3,7 @@
  */
 package geometries;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,20 +55,23 @@ public class Geometries implements Intersectable {
 	public List<Point3D> findIntersections(Ray ray) {
 		// TODO Auto-generated method stub
 		List<Point3D> result = null;
-		//if no geometries in the scene
+		// if no geometries in the scene
 		if (_geometries != null) {
 			Iterator<Intersectable> iterator = _geometries.iterator();
 			while (iterator.hasNext()) {
-				if (result == null) {
-					result = iterator.next().findIntersections(ray);
-				} else {
-					result.addAll(iterator.next().findIntersections(ray));/////////////////////////////
-					// should add the Point (3.5, 1, 0) that comes from the plane find intersection
+				List<Point3D> tempList = iterator.next().findIntersections(ray);
+				//if there are intersection points for a specific geometry in the list
+				if (tempList != null) {
+					//if it is the first list of intersection point -> build the list
+					if (result == null) {
+						result = new ArrayList<Point3D>();
+					}
+					//append the list from that geometry to the result list
+					result.addAll(tempList);
 				}
 			}
 			return result;
 		}
 		return null;
 	}
-
 }
