@@ -1,6 +1,8 @@
 package geometries;
 import primitives.Ray;
 
+import java.util.List;
+
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -57,6 +59,10 @@ public class Tube extends RadialGeometry {
 	@Override
 	public String toString() {
 		return "" + _axisRay + " " + super.toString();
+	}
+	
+	public List<Point3D> findIntersections(Ray ray){
+		return null;
 	}
 
 }

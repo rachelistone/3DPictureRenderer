@@ -3,13 +3,10 @@
  */
 package unittests;
 
-import static java.lang.System.out;
 import static org.junit.Assert.*;
-import static primitives.Util.isZero;
 
 import org.junit.Test;
 
-import geometries.Polygon;
 import primitives.Point3D;
 import primitives.Vector;
 

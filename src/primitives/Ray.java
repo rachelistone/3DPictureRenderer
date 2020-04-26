@@ -75,6 +75,14 @@ public class Ray {
     }
 	
 
-	
+	/**
+	 * calculate and return the point of the multiplication between the ray and scalar
+	 * 
+	 * @param t is the scalar
+	 * @return point that the scaled ray arrived there
+	 */
+	public Point3D getPoint(double t) {
+		return _p0.add(_dir.scale(t));
+	}
 
 }

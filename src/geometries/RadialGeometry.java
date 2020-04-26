@@ -21,6 +21,8 @@ public abstract class RadialGeometry implements Geometry {
 	 * @param radius the value of the radius
 	 */
 	public RadialGeometry(double radius) {
+		if (radius == 0)
+			throw new IllegalArgumentException("radius can not be zero");
 		_radius = radius;
 	}
 	
