@@ -25,6 +25,12 @@ public class Camera {
 	private Vector _vTo;
 	private Vector _vRight;
 
+	/**
+	 * Camera is a constructor gets the place of the camera and the vectors vTo and vUp
+	 * @param p0 is the place of the camera
+	 * @param vTo vector toward the viewPlane
+	 * @param vUp vector vertical to the viewPlane 
+	 */
 	public Camera(Point3D p0, Vector vTo, Vector vUp) {
 		// TODO Auto-generated constructor stub
 		_p0 = p0;

@@ -28,7 +28,7 @@ public class Geometries implements Intersectable {
 	 */
 	public Geometries() {
 		// TODO Auto-generated constructor stub
-		_geometries = null;
+		_geometries = new ArrayList();
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class Geometries implements Intersectable {
 	 * @param geometries the collection to add
 	 */
 	public void add(Intersectable... geometries) {
-		for (int i = 1; i < geometries.length; ++i) {
+		for (int i = 0; i < geometries.length; ++i) {
 			_geometries.add(geometries[i]);
 		}
 	}
