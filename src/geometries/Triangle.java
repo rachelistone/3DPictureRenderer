@@ -2,6 +2,8 @@ package geometries;
 
 import java.util.List;
 
+import primitives.Color;
+import primitives.Material;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -13,6 +15,32 @@ import primitives.Vector;
  */
 public class Triangle extends Polygon {
 
+	
+	/**
+	 * constructor receiving 3 vertices
+	 * 
+	 * @param material the material of the geometry
+	 * @param color the color of the triangle
+	 * @param p0 the first point
+	 * @param p1 the second point
+	 * @param p2 the third point
+	 */
+	public Triangle(Material material, Color color, Point3D p0, Point3D p1, Point3D p2) {
+		super(material, color, p0, p1, p2);
+	}
+	/**
+	 * constructor receiving 3 vertices
+	 * 
+	 * @param color the color of the triangle
+	 * @param p0 the first point
+	 * @param p1 the second point
+	 * @param p2 the third point
+	 */
+	public Triangle(Color color, Point3D p0, Point3D p1, Point3D p2) {
+		this(new Material(0, 0, 0), color, p0, p1, p2);
+	}
+	
+
 	/**
 	 * constructor receiving 3 vertices
 	 * 
@@ -21,17 +49,17 @@ public class Triangle extends Polygon {
 	 * @param p2 the third point
 	 */
 	public Triangle(Point3D p0, Point3D p1, Point3D p2) {
-		super(p0, p1, p2);
+		this(Color.BLACK, p0, p1, p2);
 	}
 
 	/**
 	 * find the intersection point between the the ray and the triangle, if exist
 	 * 
 	 * @param ray to check if it intersects the triangle
-	 * @return list of 3D points
+	 * @return list of pairs of geometry and point
 	 */
-	public List<Point3D> findIntersections(Ray ray) {
-		List<Point3D> result = _plane.findIntersections(ray);
+	public List<GeoPoint> findIntersections(Ray ray) {
+		List<GeoPoint> result = _plane.findIntersections(ray);
 		// if the ray intersects the plane that the triangle on it
 		if (result != null) {
 			// two vectors that between the source of the ray and the vertexes
@@ -65,9 +93,9 @@ public class Triangle extends Polygon {
 			}
 			// if all the signs of the projections are the same, so the point is on the
 			// triangle,
-			// so return the list of the intersection points between the ray and the plane
+			// so return the list of pairs of intersection points between the ray and the Triangle
 			// that the triangle is on it
-			return result;
+			return List.of(new GeoPoint(this, result.get(0)._point));
 		} else
 			return null;
 	}

@@ -1,34 +1,23 @@
-/**
- * 
- */
 package elements;
 
 import primitives.Color;
 
 /**
- * @author User
- *
+ * the class AmbientLight defines the base color of the scene
+ * 
+ * @author Yochi Shtrauber 204023055 & Rachel Stone 315353938 email:
+ *         yochishtrauber@gmail.com rachelstone1996@gmail.com
  */
-public class AmbientLight {
+public class AmbientLight extends Light{
 
 	/**
+	 * constructor getting the coefficient of the attenuation and the intensity of the ambient light and scales them
 	 * 
-	 */
-	private Color _Intensity;
-
-	/**
-	 * 
+	 * @param ka the coefficient of the attenuation 
+	 * @param Ia the intensity of the ambient light
 	 */
 	public AmbientLight(double ka, Color Ia) {
-		// TODO Auto-generated constructor stub
-		_Intensity = Ia.scale(ka);
-	}
-	
-	/**
-	 * @return the _Intensity
-	 */
-	public Color getIntensity() {
-		return _Intensity;
+		super(Ia.scale(ka));
 	}
 
 }

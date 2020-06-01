@@ -3,6 +3,8 @@ import primitives.Ray;
 
 import java.util.List;
 
+import primitives.Color;
+import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -18,6 +20,31 @@ public class Tube extends RadialGeometry {
 	 */
 	protected Ray _axisRay;
 	
+	
+	/**
+	 * constructor receiving radius, axis ray of the tube center, the color and the material
+	 * 
+	 * @param material is the material of the geometry
+	 * @param color is the color of the Tube
+	 * @param radius
+	 * @param axisRay the axis ray of the tube center
+	 */
+	public Tube(Material material, Color color, double radius, Ray axisRay) {
+		super(material, color, radius);
+		_axisRay = new Ray(axisRay);
+	}
+	
+	/**
+	 * constructor receiving radius and axis ray of the tube center
+	 * 
+	 * @param color is the color of the Tube
+	 * @param radius
+	 * @param axisRay the axis ray of the tube center
+	 */
+	public Tube(Color color, double radius, Ray axisRay) {
+		this(new Material(0, 0, 0), color, radius, axisRay);
+	}
+	
 	/**
 	 * constructor receiving radius and axis ray of the tube center
 	 * 
@@ -25,8 +52,7 @@ public class Tube extends RadialGeometry {
 	 * @param axisRay the axis ray of the tube center
 	 */
 	public Tube(double radius, Ray axisRay) {
-		super(radius);
-		_axisRay = new Ray(axisRay);
+		this(new Material(0, 0, 0), Color.BLACK, radius, axisRay);
 	}
 
 	/**
@@ -61,7 +87,7 @@ public class Tube extends RadialGeometry {
 		return "" + _axisRay + " " + super.toString();
 	}
 	
-	public List<Point3D> findIntersections(Ray ray){
+	public List<GeoPoint> findIntersections(Ray ray){
 		return null;
 	}
 

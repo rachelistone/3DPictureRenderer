@@ -5,6 +5,8 @@ package geometries;
 
 import java.util.List;
 
+import primitives.Color;
+import primitives.Material;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -20,17 +22,42 @@ public class Cylinder extends Tube {
 	 * the height of the Cylinder
 	 */
 	protected double _height;
+	
+	/**
+	 * constructor setting the fields   
+	 * 
+	 * @param material the material of the geometry
+	 * @param color the color of the geometry
+	 * @param radius the distance from the center axis to the bordure
+	 * @param axisRay the axis of the cylinder center
+	 * @param height the height of the cylinder
+	 */
+	public Cylinder(Material material, Color color, double radius, Ray axisRay, double height) {
+		super(material, color, radius, axisRay);
+		_height = height;
+	}
 
 	/**
-	 * constructor receiving the radius and the axis ray of the cylinder center and the height   
+	 * constructor setting the fields     
+	 * 
+	 * @param color the color of the geometry
+	 * @param radius the distance from the center axis to the bordure
+	 * @param axisRay the axis of the cylinder center
+	 * @param height the height of the cylinder
+	 */
+	public Cylinder(Color color, double radius, Ray axisRay, double height) {
+		this(new Material(0, 0, 0), color, radius, axisRay, height);
+	}
+	
+	/**
+	 * constructor setting the fields     
 	 * 
 	 * @param radius the distance from the center axis to the bordure
 	 * @param axisRay the axis of the cylinder center
 	 * @param height the height of the cylinder
 	 */
 	public Cylinder(double radius, Ray axisRay, double height) {
-		super(radius, axisRay);
-		_height = height;
+	      this(new Material(0, 0, 0), Color.BLACK, radius, axisRay, height);
 	}
 	
 	/**
@@ -65,7 +92,7 @@ public class Cylinder extends Tube {
 		return "" + _height + " " + super.toString();
 	}
 	
-	public List<Point3D> findIntersections(Ray ray){
+	public List<GeoPoint> findIntersections(Ray ray){
 		return null;
 	}
 }

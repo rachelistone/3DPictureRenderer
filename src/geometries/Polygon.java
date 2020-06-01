@@ -10,7 +10,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
     /**
      * List of polygon's vertices
      */
@@ -19,11 +19,13 @@ public class Polygon implements Geometry {
      * Associated plane in which the polygon lays
      */
     protected Plane _plane;
-
+    
     /**
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
      * 
+     * @param material the material of the geometry
+     * @param color is the color of the geometry
      * @param vertices list of vertices according to their order by edge path
      * @throws IllegalArgumentException in any case of illegal combination of
      *                                  vertices:
@@ -41,7 +43,8 @@ public class Polygon implements Geometry {
      *                                  <li>The polygon is concave (not convex></li>
      *                                  </ul>
      */
-    public Polygon(Point3D... vertices) {
+    public Polygon(Material material, Color color, Point3D... vertices) {
+    	super(material, color);
         if (vertices.length < 3)
             throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
         _vertices = List.of(vertices);
@@ -79,7 +82,63 @@ public class Polygon implements Geometry {
                 throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
         }
     }
+    
+    /**
+     * Polygon constructor based on vertices list. The list must be ordered by edge
+     * path. The polygon must be convex.
+     * 
+     * @param color is the color of the geometry
+     * @param vertices list of vertices according to their order by edge path
+     * @throws IllegalArgumentException in any case of illegal combination of
+     *                                  vertices:
+     *                                  <ul>
+     *                                  <li>Less than 3 vertices</li>
+     *                                  <li>Consequent vertices are in the same
+     *                                  point
+     *                                  <li>The vertices are not in the same
+     *                                  plane</li>
+     *                                  <li>The order of vertices is not according
+     *                                  to edge path</li>
+     *                                  <li>Three consequent vertices lay in the
+     *                                  same line (180&#176; angle between two
+     *                                  consequent edges)
+     *                                  <li>The polygon is concave (not convex></li>
+     *                                  </ul>
+     */
+    public Polygon(Color color, Point3D... vertices) {
+    	this(new Material(0, 0, 0), color, vertices);
+    }
 
+    
+
+    /**
+     * Polygon constructor based on vertices list. The list must be ordered by edge
+     * path. The polygon must be convex.
+     * 
+     * @param vertices list of vertices according to their order by edge path
+     * @throws IllegalArgumentException in any case of illegal combination of
+     *                                  vertices:
+     *                                  <ul>
+     *                                  <li>Less than 3 vertices</li>
+     *                                  <li>Consequent vertices are in the same
+     *                                  point
+     *                                  <li>The vertices are not in the same
+     *                                  plane</li>
+     *                                  <li>The order of vertices is not according
+     *                                  to edge path</li>
+     *                                  <li>Three consequent vertices lay in the
+     *                                  same line (180&#176; angle between two
+     *                                  consequent edges)
+     *                                  <li>The polygon is concave (not convex></li>
+     *                                  </ul>
+     */
+    
+    public Polygon( Point3D... vertices) {
+    	 this(new Material(0, 0, 0), Color.BLACK, vertices);
+    }
+    
+    
+    
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal();
@@ -89,10 +148,10 @@ public class Polygon implements Geometry {
 	 * find the intersection point between the the ray and the polygon, if exist
 	 * 
 	 * @param ray to check if it intersects the polygon
-	 * @return list of 3D points
+	 * @return list of pairs of geometry and point
 	 */
-	public List<Point3D> findIntersections(Ray ray) {
-		List<Point3D> result = _plane.findIntersections(ray);
+	public List<GeoPoint> findIntersections(Ray ray) {
+		List<GeoPoint> result = _plane.findIntersections(ray);
 		// if the ray intersects the plane that the triangle on it
 		if (result != null) {
 			// two vectors that between the source of the ray and the vertexes
@@ -126,9 +185,9 @@ public class Polygon implements Geometry {
 			}
 			// if all the signs of the projections are the same, so the point is on the
 			// triangle,
-			// so return the list of the intersection points between the ray and the plane
+			// so return the list of pairs of intersection points with the ray and the polygon
 			// that the triangle is on it
-			return result;
+			return List.of(new GeoPoint(this, result.get(0)._point));
 		} else
 			return null;
 	}

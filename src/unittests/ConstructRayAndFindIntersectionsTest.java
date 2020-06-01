@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Test;
 
 import elements.Camera;
+import geometries.Intersectable.GeoPoint;
 import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
@@ -34,7 +35,7 @@ public class ConstructRayAndFindIntersectionsTest {
 		Sphere sphere = new Sphere(new Point3D(0, 0, 3), 1d);
 		Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, 1), new Vector(0, -1, 0));
 		int result = 0;
-		List<Point3D> temp;
+		List<GeoPoint> temp;
 		int i;
 		int j;
 		for (i = 0; i < 3; i++) {
@@ -133,7 +134,7 @@ public class ConstructRayAndFindIntersectionsTest {
 		int result;
 		int i;
 		int j;
-		List<Point3D> temp;
+		List<GeoPoint> temp;
 		// TC01 the plane is parallel to the view plane, the view plane distance from
 		// the camera is 1(9 points)
 		plane = new Plane(new Point3D(0, 0, 2), new Vector(0, 0, 1));
@@ -199,7 +200,7 @@ public class ConstructRayAndFindIntersectionsTest {
 		int result;
 		int i;
 		int j;
-		List<Point3D> temp;
+		List<GeoPoint> temp;
 		
 		//TC01: the triangle is behind the mid pixel
 		triangle = new Triangle(new Point3D(0, -1, 2), new Point3D(1, 1, 2), new Point3D(-1, 1, 2));

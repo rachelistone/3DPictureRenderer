@@ -2,6 +2,8 @@ package geometries;
 
 import java.util.List;
 
+import primitives.Color;
+import primitives.Material;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
@@ -13,7 +15,7 @@ import primitives.Vector;
  * 
  * @author Yochi Shtrauber & Rachel Stone
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 	/**
 	 * a point on the plane
 	 */
@@ -25,6 +27,39 @@ public class Plane implements Geometry {
 	protected Vector _normal;
 
 	/**
+	 * constructor receiving the material, color,  three 3D points dissenters the plane it takes 2 vectors
+	 * from the vertices and calculates their normal to the plane
+	 * 
+	 * @param material the material of the geometry
+	 * @param color the color of the Plane
+	 * @param p0 the first point
+	 * @param p1 the second point
+	 * @param p2 the third point
+	 */
+	public Plane(Material material, Color color, Point3D p0, Point3D p1, Point3D p2) {
+		super(material, color);
+		_p = new Point3D(p0);
+		Vector v1 = p1.subtract(p0);
+		Vector v2 = p2.subtract(p0);
+		if (v1.normalize() == v2.normalize())
+			throw new IllegalArgumentException("there are two vertices on the same line");
+		_normal = v1.crossProduct(v2).normalize();
+	}
+	
+	/**
+	 * constructor receiving three 3D points dissenters the plane it takes 2 vectors
+	 * from the vertices and calculates their normal to the plane
+	 * 
+	 * @param color the color of the Plane
+	 * @param p0 the first point
+	 * @param p1 the second point
+	 * @param p2 the third point
+	 */
+	public Plane(Color color, Point3D p0, Point3D p1, Point3D p2) {
+		this(new Material(0, 0, 0), color, p0, p1, p2);
+	}
+	
+	/**
 	 * constructor receiving three 3D points dissenters the plane it takes 2 vectors
 	 * from the vertices and calculates their normal to the plane
 	 * 
@@ -33,21 +68,42 @@ public class Plane implements Geometry {
 	 * @param p2 the third point
 	 */
 	public Plane(Point3D p0, Point3D p1, Point3D p2) {
-		_p = new Point3D(p0);
-		Vector v1 = p1.subtract(p0);
-		Vector v2 = p2.subtract(p0);
-		if (v1.normalize() == v2.normalize())
-			throw new IllegalArgumentException("there are two vertices on the same line");
-		_normal = v1.crossProduct(v2).normalize();
+		this(new Material(0, 0, 0), Color.BLACK, p0, p1, p2);
 	}
 
 	/**
 	 * constructor receiving the fields, point on the plane and a normal
+	 * 
+	 * @param color the color of the Plane
+	 * @param p0 the point on the plane
+	 * @param normal the normal of the plane
 	 */
-	public Plane(Point3D p0, Vector normal) {
+	public Plane(Material material, Color color, Point3D p0, Vector normal) {
+		super(material, color);
 		normal.normalize();
 		_p = new Point3D(p0);
 		_normal = new Vector(normal);
+	}
+	
+	/**
+	 * constructor receiving the fields, point on the plane and a normal
+	 * 
+	 * @param color the color of the Plane
+	 * @param p0 the point on the plane
+	 * @param normal the normal of the plane
+	 */
+	public Plane(Color color, Point3D p0, Vector normal) {
+		this(new Material(0, 0, 0), color, p0, normal); 
+	}
+	
+	/**
+	 * constructor receiving the fields, point on the plane and a normal
+	 * 
+	 * @param p0 the point on the plane
+	 * @param normal the normal of the plane
+	 */
+	public Plane(Point3D p0, Vector normal) {
+		this(new Material(0, 0, 0), Color.BLACK, p0, normal);
 	}
 
 	/**
@@ -81,9 +137,9 @@ public class Plane implements Geometry {
 	 * finds the intersection point between the ray and the plane, if exist
 	 * 
 	 * @param ray to check if it intersects the plane
-	 * @return list of 3D points
+	 * @return list of pairs of geometry and point
 	 */
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray) {
 		ray.get_dir().normalize();
 		// if the ray is parallel to the plane -> no intersections
 		double nv = _normal.dotProduct(ray.get_dir()); // denominator
@@ -107,7 +163,7 @@ public class Plane implements Geometry {
 		if (t <= 0) {
 			return null;
 		} else {
-			return List.of(ray.getPoint(t));
+			return List.of(new GeoPoint(this, ray.getPoint(t)));
 		}
 	}
 

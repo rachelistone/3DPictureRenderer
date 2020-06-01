@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Test;
 
 import geometries.Triangle;
+import geometries.Intersectable.GeoPoint;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -45,7 +46,7 @@ public class TriangleTest {
 		Triangle triangle = new Triangle(new Point3D(0, 1, 0), new Point3D(0, 3, 0), new Point3D(1, 2, 0));
 		// ============ Equivalence Partitions Tests ==============
 		// TC01: the intersection point is inside the triangle
-		assertEquals("the ray should intersect the triangle", List.of(new Point3D(0.5, 2, 0)),
+		assertEquals("the ray should intersect the triangle", List.of(new GeoPoint(triangle, new Point3D(0.5, 2, 0))),
 				triangle.findIntersections(new Ray(new Point3D(0.5, 2, -1), new Vector(0, 0, 1))));
 		// TC02: the intersections point is out of the triangle and against a rib of the
 		// triangle

@@ -52,19 +52,19 @@ public class Geometries implements Intersectable {
 	}
 
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray) {
 		// TODO Auto-generated method stub
-		List<Point3D> result = null;
+		List<GeoPoint> result = null;
 		// if no geometries in the scene
 		if (_geometries != null) {
 			Iterator<Intersectable> iterator = _geometries.iterator();
 			while (iterator.hasNext()) {
-				List<Point3D> tempList = iterator.next().findIntersections(ray);
+				List<GeoPoint> tempList = iterator.next().findIntersections(ray);
 				//if there are intersection points for a specific geometry in the list
 				if (tempList != null) {
 					//if it is the first list of intersection point -> build the list
 					if (result == null) {
-						result = new ArrayList<Point3D>();
+						result = new ArrayList<GeoPoint>();
 					}
 					//append the list from that geometry to the result list
 					result.addAll(tempList);
