@@ -87,7 +87,7 @@ public class Tube extends RadialGeometry {
 		return "" + _axisRay + " " + super.toString();
 	}
 	
-	public List<GeoPoint> findIntersections(Ray ray){
+	public List<GeoPoint> findIntersections(Ray ray, double maxValue){
 		return null;
 	}
 

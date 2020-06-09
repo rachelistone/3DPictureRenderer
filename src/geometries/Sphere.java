@@ -31,9 +31,9 @@ public class Sphere extends RadialGeometry {
 	 */
 	public Sphere(Material material, Color color, Point3D center, double radius) {
 		super(material, color, radius);
-		_center = new Point3D(center); 
-	} 
-	
+		_center = new Point3D(center);
+	}
+
 	/**
 	 * constructor receiving color, center point and the radius
 	 * 
@@ -42,7 +42,7 @@ public class Sphere extends RadialGeometry {
 	public Sphere(Color color, Point3D center, double radius) {
 		this(new Material(0, 0, 0), color, center, radius);
 	}
-	
+
 	/**
 	 * constructor receiving a center point and the radius
 	 * 
@@ -51,8 +51,6 @@ public class Sphere extends RadialGeometry {
 	public Sphere(Point3D center, double radius) {
 		this(new Material(0, 0, 0), Color.BLACK, center, radius);
 	}
-	
-	
 
 	/**
 	 * getter to the center point
@@ -81,7 +79,7 @@ public class Sphere extends RadialGeometry {
 	 * @param ray to find the intersections
 	 * @return list of pairs of geometry and point
 	 */
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
 		// a vector from the source of the ray to the center of the sphere
 		Vector u;
 		try {
@@ -89,7 +87,11 @@ public class Sphere extends RadialGeometry {
 			// if the ray starts at the center of the sphere, u is zero vector and it can't
 			// be built
 		} catch (IllegalArgumentException e) {
-			return List.of(new GeoPoint(this, ray.getPoint(_radius)));
+			// return only if the point is in the range smaller than maxDistance
+			if (Util.alignZero(_radius - maxDistance) <= 0)
+				return List.of(new GeoPoint(this, ray.getPoint(_radius)));
+			else
+				return null;
 		}
 		// the projection of u on the ray
 		double tm = Util.alignZero(ray.get_dir().dotProduct(u));
@@ -124,11 +126,24 @@ public class Sphere extends RadialGeometry {
 			// if the source of the ray is inside the sphere -> only one intersection point,
 			// just add the half of the chord to scale the vector of the ray
 			if (tm <= th) {
-				return List.of(new GeoPoint(this, new Point3D(new Point3D(ray.getPoint(tm + th)))));
+				if (Util.alignZero(tm + th - maxDistance) <= 0)
+					return List.of(new GeoPoint(this, new Point3D(new Point3D(ray.getPoint(tm + th)))));
 			}
 			// the list of the point computes by the scaled ray
-			return List.of(new GeoPoint(this, new Point3D(ray.getPoint(tm - th))),
-					new GeoPoint(this, new Point3D(ray.getPoint(tm + th))));
+			// return only if the point is in the range smaller than maxDistance
+			if (Util.alignZero(tm - th - maxDistance) <= 0 && Util.alignZero(tm + th - maxDistance) <= 0) {
+				return List.of(new GeoPoint(this, new Point3D(ray.getPoint(tm - th))),
+						new GeoPoint(this, new Point3D(ray.getPoint(tm + th))));
+			} else {
+				if (Util.alignZero(tm - th - maxDistance) <= 0)
+					return List.of(new GeoPoint(this, new Point3D(ray.getPoint(tm - th))));
+				else {
+					if (Util.alignZero(tm + th - maxDistance) <= 0)
+						return List.of(new GeoPoint(this, new Point3D(ray.getPoint(tm + th))));
+					else
+						return null;
+				}
+			}
 		}
 	}
 

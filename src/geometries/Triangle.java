@@ -58,8 +58,8 @@ public class Triangle extends Polygon {
 	 * @param ray to check if it intersects the triangle
 	 * @return list of pairs of geometry and point
 	 */
-	public List<GeoPoint> findIntersections(Ray ray) {
-		List<GeoPoint> result = _plane.findIntersections(ray);
+	public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+		List<GeoPoint> result = _plane.findIntersections(ray, maxDistance);
 		// if the ray intersects the plane that the triangle on it
 		if (result != null) {
 			// two vectors that between the source of the ray and the vertexes

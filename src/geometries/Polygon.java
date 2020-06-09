@@ -144,14 +144,9 @@ public class Polygon extends Geometry {
         return _plane.getNormal();
     }
     
-    /**
-	 * find the intersection point between the the ray and the polygon, if exist
-	 * 
-	 * @param ray to check if it intersects the polygon
-	 * @return list of pairs of geometry and point
-	 */
-	public List<GeoPoint> findIntersections(Ray ray) {
-		List<GeoPoint> result = _plane.findIntersections(ray);
+    @Override
+	public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+		List<GeoPoint> result = _plane.findIntersections(ray, maxDistance);
 		// if the ray intersects the plane that the triangle on it
 		if (result != null) {
 			// two vectors that between the source of the ray and the vertexes

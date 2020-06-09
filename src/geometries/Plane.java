@@ -27,14 +27,15 @@ public class Plane extends Geometry {
 	protected Vector _normal;
 
 	/**
-	 * constructor receiving the material, color,  three 3D points dissenters the plane it takes 2 vectors
-	 * from the vertices and calculates their normal to the plane
+	 * constructor receiving the material, color, three 3D points dissenters the
+	 * plane it takes 2 vectors from the vertices and calculates their normal to the
+	 * plane
 	 * 
 	 * @param material the material of the geometry
-	 * @param color the color of the Plane
-	 * @param p0 the first point
-	 * @param p1 the second point
-	 * @param p2 the third point
+	 * @param color    the color of the Plane
+	 * @param p0       the first point
+	 * @param p1       the second point
+	 * @param p2       the third point
 	 */
 	public Plane(Material material, Color color, Point3D p0, Point3D p1, Point3D p2) {
 		super(material, color);
@@ -45,20 +46,20 @@ public class Plane extends Geometry {
 			throw new IllegalArgumentException("there are two vertices on the same line");
 		_normal = v1.crossProduct(v2).normalize();
 	}
-	
+
 	/**
 	 * constructor receiving three 3D points dissenters the plane it takes 2 vectors
 	 * from the vertices and calculates their normal to the plane
 	 * 
 	 * @param color the color of the Plane
-	 * @param p0 the first point
-	 * @param p1 the second point
-	 * @param p2 the third point
+	 * @param p0    the first point
+	 * @param p1    the second point
+	 * @param p2    the third point
 	 */
 	public Plane(Color color, Point3D p0, Point3D p1, Point3D p2) {
 		this(new Material(0, 0, 0), color, p0, p1, p2);
 	}
-	
+
 	/**
 	 * constructor receiving three 3D points dissenters the plane it takes 2 vectors
 	 * from the vertices and calculates their normal to the plane
@@ -74,8 +75,8 @@ public class Plane extends Geometry {
 	/**
 	 * constructor receiving the fields, point on the plane and a normal
 	 * 
-	 * @param color the color of the Plane
-	 * @param p0 the point on the plane
+	 * @param color  the color of the Plane
+	 * @param p0     the point on the plane
 	 * @param normal the normal of the plane
 	 */
 	public Plane(Material material, Color color, Point3D p0, Vector normal) {
@@ -84,22 +85,22 @@ public class Plane extends Geometry {
 		_p = new Point3D(p0);
 		_normal = new Vector(normal);
 	}
-	
+
 	/**
 	 * constructor receiving the fields, point on the plane and a normal
 	 * 
-	 * @param color the color of the Plane
-	 * @param p0 the point on the plane
+	 * @param color  the color of the Plane
+	 * @param p0     the point on the plane
 	 * @param normal the normal of the plane
 	 */
 	public Plane(Color color, Point3D p0, Vector normal) {
-		this(new Material(0, 0, 0), color, p0, normal); 
+		this(new Material(0, 0, 0), color, p0, normal);
 	}
-	
+
 	/**
 	 * constructor receiving the fields, point on the plane and a normal
 	 * 
-	 * @param p0 the point on the plane
+	 * @param p0     the point on the plane
 	 * @param normal the normal of the plane
 	 */
 	public Plane(Point3D p0, Vector normal) {
@@ -139,7 +140,7 @@ public class Plane extends Geometry {
 	 * @param ray to check if it intersects the plane
 	 * @return list of pairs of geometry and point
 	 */
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
 		ray.get_dir().normalize();
 		// if the ray is parallel to the plane -> no intersections
 		double nv = _normal.dotProduct(ray.get_dir()); // denominator
@@ -147,7 +148,7 @@ public class Plane extends Geometry {
 			return null;
 		}
 		// if the source of the ray is the point that defines the plane
-		if (_p.equals(ray.get_p0())){	
+		if (_p.equals(ray.get_p0())) {
 			return null;
 		}
 		// t is the scalar to scale the ray in order to reach the intersection point,
@@ -163,7 +164,9 @@ public class Plane extends Geometry {
 		if (t <= 0) {
 			return null;
 		} else {
-			return List.of(new GeoPoint(this, ray.getPoint(t)));
+			if (Util.alignZero(t - maxDistance) <= 0) {
+				return List.of(new GeoPoint(this, ray.getPoint(t)));
+			} else return null;
 		}
 	}
 

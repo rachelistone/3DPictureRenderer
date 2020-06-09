@@ -17,13 +17,26 @@ import primitives.Ray;
 public interface Intersectable {
 
 	/**
-	 * findIntersections is a function that finds and return a list of the
-	 * pairs of intersection point with the ray and the geometry
+	 * findIntersections is a function that finds and return a list of the pairs of
+	 * intersection point with the ray and the geometry
 	 * 
 	 * @param ray is the ray that the function finds the points that intersect it
 	 * @return list of pairs of geometry and point
 	 */
-	public List<GeoPoint> findIntersections(Ray ray);
+	default public List<GeoPoint> findIntersections(Ray ray){
+		return findIntersections(ray, Double.POSITIVE_INFINITY);
+	}
+
+	/**
+	 * findIntersections is a function that finds and return a list of the pairs of
+	 * intersection point with the ray and the geometry, returns only the
+	 * intersection points that resides between the source of the ray (point on other geometry) in a distance maxDistance
+	 * 
+	 * @param ray is the ray that the function finds the points that intersect it
+	 * @param maxDistance the distance between the source of the ray and the position of the light source 
+	 * @return list of pairs of geometry and point, between the 'maxDistance' distance on the ray
+	 */
+	public List<GeoPoint> findIntersections(Ray ray, double maxDistance);
 
 	/**
 	 * GeoPoint is a class that defines a pair of geometry and point
