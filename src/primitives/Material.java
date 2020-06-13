@@ -25,11 +25,19 @@ public class Material {
 	 * the coefficient of the the reflection
 	 */
 	double _kR;
-	
+
 	/**
 	 * the coefficient of the the refraction
 	 */
 	double _kT;
+
+	/**
+	 * the glossy of the geometry as _glosssy has higher values it is more sharp(
+	 * the circle of the ray' group is farther than the geometry) as it is lower
+	 * (the circles of the rays' Group closer to the geometry), 0 means no
+	 * glossy(only one reflected ray = super sharp mirroring
+	 */
+	double _glossy;
 
 	/**
 	 * the shininess
@@ -39,10 +47,10 @@ public class Material {
 	/**
 	 * constructor initialized the fields of the class
 	 * 
-	 * @param _kD the coefficient of the diffuse
-	 * @param _kS the coefficient of the specular
-	 * @param _kR the coefficient of the reflection
-	 * @param _kT the coefficient of the refraction
+	 * @param _kD         the coefficient of the diffuse
+	 * @param _kS         the coefficient of the specular
+	 * @param _kR         the coefficient of the reflection
+	 * @param _kT         the coefficient of the refraction
 	 * @param _nShininess shininess
 	 */
 	public Material(double kD, double kS, int nShininess, double kT, double kR) {
@@ -52,7 +60,7 @@ public class Material {
 		_kT = kT;
 		_nShininess = nShininess;
 	}
-	
+
 	/**
 	 * constructor initialized the fields of the class
 	 * 
@@ -61,7 +69,7 @@ public class Material {
 	 * @param _nShininess shininess
 	 */
 	public Material(double kD, double kS, int nShininess) {
-		 this(kD, kS, nShininess, 0.0, 0.0);
+		this(kD, kS, nShininess, 0.0, 0.0);
 	}
 
 	/**
@@ -97,6 +105,13 @@ public class Material {
 	 */
 	public int get_nShininess() {
 		return _nShininess;
+	}
+
+	/**
+	 * @return the _glossy
+	 */
+	public double get_glossy() {
+		return _glossy;
 	}
 
 }

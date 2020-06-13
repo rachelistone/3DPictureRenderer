@@ -51,11 +51,23 @@ public class Ray {
 		// with the delta
 		// if the normal is towards the inside of the geometry -> reverse the direction
 		// of the normal
-		_dir = direction.normalize();
+		_dir = direction.normalized();
 		Vector delta = normal.scale(normal.dotProduct(direction) >= 0 ? DELTA : -DELTA);
 		_p0 = point.add(delta);
 	}
 
+//	/**
+//	 * constructor getting 2 points , one for the head of the ray, and the second for the source of it,
+//	 *  and subtract between them to get the direction vector of the ray
+//	 * 
+//	 * @param p0 the source of the ray
+//	 * @param head the head of the ray
+//	 */
+//	public Ray(Point3D p0, Point3D head) {
+//		_dir = head.subtract(p0).normalize();;
+//		_p0 = p0;
+//	}
+	
 	/**
 	 * copy constructor for a ray
 	 * 

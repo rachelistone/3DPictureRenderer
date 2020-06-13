@@ -3,8 +3,11 @@
  */
 package renderer;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.DoubleStream;
 
 import elements.Camera;
 import elements.LightSource;
@@ -18,7 +21,8 @@ import scene.Scene;
 
 /**
  * the class Render would generate the picture to the jpg file according to the
- * scene it has
+ * scene it has, and responsible for generating pixel color map from the graphic
+ * scene, using ImageWriter class
  * 
  * @author Yochi Shtrauber 204023055 & Rachel Stone 315353938 email:
  *         yochishtrauber@gmail.com rachelstone1996@gmail.com
@@ -46,6 +50,40 @@ public class Render {
 	private static final double MIN_CALC_COLOR_K = 0.001;
 
 	/**
+	 * renderImage generates the picture by building the rays to the view plane and
+	 * calculating each pixel
+	 */
+	public void renderImage() {
+		Camera camera = _scene.get_camera();
+		java.awt.Color background = _scene.get_background().getColor();
+		int nX = _imageWriter.getNx();
+		int nY = _imageWriter.getNy();
+		double distance = _scene.get_distance();
+		double width = _imageWriter.getWidth();
+		double height = _imageWriter.getHeight();
+		// write to each pixel of the image
+		for (int col = 0; col < nX; col++) {
+			for (int row = 0; row < nY; row++) {
+				// construct a ray to each pixel and find the closest intersection point of that
+				// ray
+				// with the geometries of the scene
+				if (col == 145 && row == 355) {
+					System.out.print('g');;
+				}
+				Ray ray = camera.constructRayThroughPixel(nX, nY, col, row, distance, width, height);
+				GeoPoint closestPoint = findCLosestIntersection(ray);
+				// if there is no geometry at that direction -> color as the background, else
+				// color according to the geometry there and its position
+				if (closestPoint == null) {
+					_imageWriter.writePixel(col, row, background);
+				} else {
+					_imageWriter.writePixel(col, row, calcColor(closestPoint, ray).getColor());
+				}
+			}
+		}
+	}
+
+	/**
 	 * the Render constructor that gets Scene and ImageWriter
 	 * 
 	 * @param scene       the all the things in the image
@@ -64,51 +102,15 @@ public class Render {
 	}
 
 	/**
-	 * renderImage generates the picture by building the rays to the view plane and
-	 * calculating each pixel
-	 */
-	public void renderImage() {
-		Camera camera = _scene.get_camera();
-		java.awt.Color background = _scene.get_background().getColor();
-		int nX = _imageWriter.getNx();
-		int nY = _imageWriter.getNy();
-		double distance = _scene.get_distance();
-		double width = _imageWriter.getWidth();
-		double height = _imageWriter.getHeight();
-		// write to each pixel of the image
-		for (int col = 0; col < nX; col++) {
-			for (int row = 0; row < nY; row++) {
-				// construct a ray to each pixel and find the closest intersection point of that
-				// ray
-				// with the geometries of the scene
-				if (col > 150 && row > 375) {
-					System.out.print("hi");
-				}
-				Ray ray = camera.constructRayThroughPixel(nX, nY, col, row, distance, width, height);
-				GeoPoint closestPoint = findCLosestIntersection(ray);
-				// if there is no geometry at that direction -> color as the background, else
-				// color according to the geometry there and its position
-				if (closestPoint == null) {
-					_imageWriter.writePixel(col, row, background);
-				} else {
-					_imageWriter.writePixel(col, row, calcColor(closestPoint, ray).getColor());
-				}
-			}
-		}
-	}
-
-	/**
-	 * from all the intersection points, this function find the closest point to the
-	 * view plane and return it
+	 * from all the intersection points, this function find the closest point to the any point and return it
 	 * 
 	 * @param intersectionPoints the points that intersect the ray in a specific
 	 *                           pixel
+	 * @param point to check the closest point to
 	 * @return the closest point to the screen, that it is the point from the
 	 *         intersection points
 	 */
-	public GeoPoint getClosestPoint(List<GeoPoint> intersectionPoints) {
-		// p0 is the point of the camera
-		Point3D p0 = _scene.get_camera().get_p0();
+	public GeoPoint getClosestPoint(Point3D point, List<GeoPoint> intersectionPoints) {
 		// result is the closest point
 		GeoPoint result = null;
 		// minDist is the minimum destination
@@ -118,13 +120,26 @@ public class Render {
 		// this for scan the all points from the list and for every point it checks
 		// if its distance is less than the last one
 		for (GeoPoint geoPoint : intersectionPoints) {
-			currentDistance = p0.distance(geoPoint._point);
+			currentDistance = point.distance(geoPoint._point);
 			if (currentDistance < minDist) {
 				minDist = currentDistance;
 				result = geoPoint;
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * from all the intersection points, this function find the closest point to the camera
+	 * and return it
+	 * 
+	 * @param intersectionPoints the points that intersect the ray in a specific
+	 *                           pixel
+	 * @return the closest point to the screen, that it is the point from the
+	 *         intersection points
+	 */
+	public GeoPoint getClosestPoint(List<GeoPoint> intersectionPoints) {
+		return getClosestPoint(_scene.get_camera().get_p0(), intersectionPoints);
 	}
 
 	/**
@@ -137,7 +152,7 @@ public class Render {
 		List<GeoPoint> intersections = _scene.get_geometries().findIntersections(ray);
 		if (intersections == null)
 			return null;
-		return getClosestPoint(intersections);
+		return getClosestPoint(ray.get_p0(), intersections);
 	}
 
 	/**
@@ -180,7 +195,6 @@ public class Render {
 		// the intensity of a specific light source in a specific point
 		Color intensity;
 
-		
 		Iterator<LightSource> iterator = _scene.get_Lights().iterator();
 		while (iterator.hasNext()) {
 			LightSource ls = iterator.next();
@@ -188,26 +202,32 @@ public class Render {
 			intensity = ls.getIntensity(closestPoint._point);
 			// if the light source and the camera is in the same direction -> this light
 			// source is significant for the point - calculate the diffuse and specular
-			if ((normal.dotProduct(l) > 0) == (normal.dotProduct(v) > 0)) {
-				double ktr = transparency(ls , l , normal, closestPoint);
+			if (normal.dotProduct(l) * normal.dotProduct(v) > 0) {
+				double ktr = transparency(ls, l, normal, closestPoint);
 				if (ktr * k > MIN_CALC_COLOR_K) {
-					intensity = ls.getIntensity(closestPoint._point).scale(ktr);
+					intensity = ls.getIntensity(closestPoint._point);// .scale(ktr);
 					color = color.add(calcDiffuse(diffuse, l, normal, intensity),
 							calcSpecular(specular, l, normal, v, nShinines, intensity));
 				}
 			}
 		}
-		
-        //calculate reflection and refraction
+
+		// calculate reflection and refraction
 		if (level == 1)
 			return Color.BLACK;
 		double kr = closestPoint._geometry.get_material().get_kR();
+		double glossy = closestPoint._geometry.get_material().get_glossy();
 		double kkr = k * kr;
 		if (kkr > MIN_CALC_COLOR_K) {
 			Ray reflectedRay = constructReflectedRay(normal, closestPoint._point, inRay);
+//			if (glossy > 0) {
+//				List<Ray> rays = constructRaysGroup(reflectedRay, glossy);
+//				color = color.add(calcColor(rays).scale(kr));
+//			} else {
 			GeoPoint reflectedPoint = findCLosestIntersection(reflectedRay);
 			if (reflectedPoint != null)
 				color = color.add(calcColor(reflectedPoint, reflectedRay, level - 1, kkr).scale(kr));
+//			}
 		}
 		double kt = closestPoint._geometry.get_material().get_kT();
 		double kkt = k * kt;

@@ -21,9 +21,9 @@ public final class Vector {
 	 * @throw illegalArgument exception when the value of point coordinates is zero
 	 */
 	public Vector(Coordinate x, Coordinate y, Coordinate z) {
-		if (x._coord == 0 && y._coord == 0 && z._coord == 0)
-			throw new IllegalArgumentException("the arguments cant be zero");
 		_head = new Point3D(x, y, z);
+		if (_head.equals(Point3D.ZERO))
+			throw new IllegalArgumentException("the arguments cant be zero");
 	}
 
 	/**
@@ -35,9 +35,9 @@ public final class Vector {
 	 * @throw illegalArgument exception when the value of point coordinates is zero
 	 */
 	public Vector(double x, double y, double z) {
-		if (x == 0 && y == 0 && z == 0)
-			throw new IllegalArgumentException("the arguments cant be zero");
 		_head = new Point3D(x, y, z);
+		if (_head.equals(Point3D.ZERO))
+			throw new IllegalArgumentException("the arguments cant be zero");
 	}
 
 	/**
@@ -103,7 +103,8 @@ public final class Vector {
 	 * @return result of the subtract
 	 */
 	public Vector subtract(Vector other) {
-		return _head.subtract(other._head);
+		Vector result = new Vector(_head.subtract(other._head));
+		return result;
 	}
 
 	/**
@@ -147,7 +148,7 @@ public final class Vector {
 	 * @return the square of the length of the vector
 	 */
 	public double lengthSquared() {
-		return _head.distanceSquared(Point3D.ZERO);
+		return _head._x.get()*_head._x.get() + _head._y.get()*_head._y.get() + _head._z.get()*_head._z.get() ;
 	}
 
 	/**
@@ -157,7 +158,7 @@ public final class Vector {
 	 * @return the length of the vector
 	 */
 	public double length() {
-		return _head.distance(Point3D.ZERO);
+		return Math.sqrt(lengthSquared());
 	}
 
 	/**
@@ -168,9 +169,7 @@ public final class Vector {
 	 */
 	public Vector normalize() {
 		double length = length();
-		_head._x = new Coordinate(_head._x._coord / length);
-		_head._y = new Coordinate(_head._y._coord / length);
-		_head._z = new Coordinate(_head._z._coord / length);
+		_head = new Point3D(_head._x._coord / length, _head._y._coord / length, _head._z._coord / length);
 		return this;
 	}
 

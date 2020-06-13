@@ -77,7 +77,7 @@ public interface Intersectable {
 			if (getClass() != obj.getClass())
 				return false;
 			GeoPoint other = (GeoPoint) obj;
-			return _geometry == _geometry && _point.equals(other._point);
+			return _geometry == other._geometry && _point.equals(other._point);
 		}
 	}
 
