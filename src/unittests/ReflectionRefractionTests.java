@@ -58,6 +58,8 @@ public class ReflectionRefractionTests {
 		scene.set_distance(10000);
 		scene.set_background(Color.BLACK);
 		scene.set_ambientLight(new AmbientLight(0.1, new Color(255, 255, 255)));
+		
+		
 
 		scene.addGeometries(
 				new Sphere(new Material(0.25, 0.25, 20, 0.5, 0), new Color(0, 0, 100), new Point3D(-950, 900, 1000),
@@ -74,7 +76,6 @@ public class ReflectionRefractionTests {
 		ImageWriter imageWriter = new ImageWriter("twoSpheresMirrored", 2500, 2500, 500, 500);
 		Render render = new Render(scene, imageWriter);
 
-		
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -102,7 +103,7 @@ public class ReflectionRefractionTests {
 		scene.addLights(new SpotLight(new Color(700, 400, 400), //
 				new Point3D(60, -50, 0), new Vector(0, 0, 1), 1, 4E-5, 2E-7));
 
-		ImageWriter imageWriter = new ImageWriter("shadow with transparency", 200, 200, 600, 600);
+		ImageWriter imageWriter = new ImageWriter("shadow with transparency1", 200, 200, 600, 600);
 		Render render = new Render(scene, imageWriter);
 
 		render.renderImage();

@@ -97,6 +97,7 @@ public class ImageWriter {
 	 * @param color final color of the pixel
 	 */
 	public void writePixel(int xIndex, int yIndex, Color color){
+		//if (xIndex == 250 && yIndex == 370) {_image.setRGB(xIndex, yIndex, color.BLACK.getRGB());}else
 		_image.setRGB(xIndex, yIndex, color.getRGB());
 	}
 

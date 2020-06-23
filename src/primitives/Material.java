@@ -14,44 +14,59 @@ public class Material {
 	/**
 	 * the coefficient of the diffuse of the material
 	 */
-	double _kD;
+	private double _kD;
 
 	/**
 	 * the coefficient of the the specular
 	 */
-	double _kS;
+	private double _kS;
 
 	/**
 	 * the coefficient of the the reflection
 	 */
-	double _kR;
+	private double _kR;
 
 	/**
 	 * the coefficient of the the refraction
 	 */
-	double _kT;
-
-	/**
-	 * the glossy of the geometry as _glosssy has higher values it is more sharp(
-	 * the circle of the ray' group is farther than the geometry) as it is lower
-	 * (the circles of the rays' Group closer to the geometry), 0 means no
-	 * glossy(only one reflected ray = super sharp mirroring
-	 */
-	double _glossy;
+	private double _kT;
 
 	/**
 	 * the shininess
 	 */
-	int _nShininess;
+	private int _nShininess;
+
+	/**
+	 * the glossyDistance of the geometry as _glosssy has higher values the heads of
+	 * the rays in the group of rays is farther from their source, it is more sharp,
+	 * the circles of the rays' Group closer to the geometry as dlossyDistance is
+	 * lower, 0 means no glossy(only one reflected ray = super sharp mirroring
+	 */
+	private double _glossyDistance;
+
+	/**
+	 * the radius of the diffusion of the glossy rays' head
+	 */
+	private double _glossyRadius;
+	
+	/**
+	 * 
+	 */
+	private double  _diffDistance;
+	
+	/**
+	 * the radius of the diffusion of the refractions rays' head
+	 */
+	private double _diffRadius;
 
 	/**
 	 * constructor initialized the fields of the class
 	 * 
-	 * @param _kD         the coefficient of the diffuse
-	 * @param _kS         the coefficient of the specular
-	 * @param _kR         the coefficient of the reflection
-	 * @param _kT         the coefficient of the refraction
-	 * @param _nShininess shininess
+	 * @param kD         the coefficient of the diffuse
+	 * @param kS         the coefficient of the specular
+	 * @param nShininess shininess
+	 * @param kR         the coefficient of the reflection
+	 * @param kT         the coefficient of the refraction
 	 */
 	public Material(double kD, double kS, int nShininess, double kT, double kR) {
 		_kD = kD;
@@ -70,6 +85,58 @@ public class Material {
 	 */
 	public Material(double kD, double kS, int nShininess) {
 		this(kD, kS, nShininess, 0.0, 0.0);
+	}
+
+	/**
+	 * 
+	 * @param glossyDistance
+	 * @param glossyRadius
+	 * @return
+	 */
+	public Material setGlossy(double glossyDistance, double glossyRadius) {
+		if (glossyDistance <= 0) {
+			throw new IllegalArgumentException("distance must be bigger then zero");
+		}
+		_glossyDistance = glossyDistance;
+
+		if (glossyRadius < 0) {
+			throw new IllegalArgumentException("radius must be positive");
+		}
+		_glossyRadius = glossyRadius;
+		return this;
+	}
+	
+	/**
+	 * @return the _diffDistance
+	 */
+	public double get_diffDistance() {
+		return _diffDistance;
+	}
+
+	/**
+	 * @return the _diffRadius
+	 */
+	public double get_diffRadius() {
+		return _diffRadius;
+	}
+
+	/**
+	 * 
+	 * @param diffDistance
+	 * @param diffRadius
+	 * @return
+	 */
+	public Material setDiffusion(double diffDistance, double diffRadius) {
+		if (diffDistance <= 0) {
+			throw new IllegalArgumentException("distance must be bigger then zero");
+		}
+		_diffDistance = diffDistance;
+
+		if (diffRadius < 0) {
+			throw new IllegalArgumentException("radius must be positive");
+		}
+		_diffRadius = diffRadius;
+		return this;
 	}
 
 	/**
@@ -108,10 +175,17 @@ public class Material {
 	}
 
 	/**
-	 * @return the _glossy
+	 * @return the _glossyDistance
 	 */
-	public double get_glossy() {
-		return _glossy;
+	public double get_glossyDistance() {
+		return _glossyDistance;
+	}
+
+	/**
+	 * @return the _glossyRadius
+	 */
+	public double get_glossyRadius() {
+		return _glossyRadius;
 	}
 
 }
